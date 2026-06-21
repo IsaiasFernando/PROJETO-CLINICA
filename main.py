@@ -4,6 +4,10 @@ import re
 import sys
 from dataclasses import dataclass
 
+import truststore
+
+truststore.inject_into_ssl()
+
 import requests
 from dotenv import load_dotenv
 
