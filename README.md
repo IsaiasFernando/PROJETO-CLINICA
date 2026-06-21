@@ -1,6 +1,10 @@
-# Desafio b2bflow - Python + Supabase + Z-API
+# Python Supabase WhatsApp
 
-Projeto em Python que lê contatos cadastrados no Supabase via API REST e envia, via Z-API, a mensagem:
+Projeto em Python que lê contatos cadastrados no Supabase via API REST e envia mensagens de WhatsApp pela Z-API.
+
+Este projeto foi criado para um desafio técnico da b2bflow e mantido com um nome mais neutro para também servir como portfólio.
+
+Mensagem enviada:
 
 ```text
 Olá, <nome_contato> tudo bem com você?
@@ -74,8 +78,15 @@ Execute:
 python main.py
 ```
 
+## Testes realizados
+
+- Leitura de contatos do Supabase testada com sucesso.
+- Montagem das mensagens personalizadas validada em modo `DRY_RUN=true`.
+- Envio real pela Z-API testado com sucesso.
+
 ## Observações
 
 - O código busca contatos do Supabase e envia no máximo 3 mensagens.
 - A mensagem enviada segue o formato exato: `Olá, <nome_contato> tudo bem com você?`.
 - Contatos sem nome ou telefone são ignorados e registrados no log.
+- O arquivo `.env` não deve ser enviado ao GitHub.
