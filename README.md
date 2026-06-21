@@ -1,6 +1,6 @@
 # Desafio b2bflow - Python + Supabase + Z-API
 
-Projeto em Python que lê contatos cadastrados no Supabase e envia, via Z-API, a mensagem:
+Projeto em Python que lê contatos cadastrados no Supabase via API REST e envia, via Z-API, a mensagem:
 
 ```text
 Olá, <nome_contato> tudo bem com você?
@@ -38,7 +38,7 @@ Copie o arquivo `.env.example` para `.env` e preencha:
 
 ```env
 SUPABASE_URL=https://seu-projeto.supabase.co
-SUPABASE_KEY=sua-chave-anon-ou-service-role
+SUPABASE_KEY=sua-chave-public-ou-anon
 
 CONTACTS_TABLE=contacts
 NAME_COLUMN=name

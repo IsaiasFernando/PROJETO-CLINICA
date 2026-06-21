@@ -6,7 +6,6 @@ from dataclasses import dataclass
 
 import requests
 from dotenv import load_dotenv
-from supabase import Client, create_client
 
 
 MESSAGE_TEMPLATE = "Olá, {name} tudo bem com você?"
@@ -63,17 +62,20 @@ def normalize_phone(phone: str) -> str:
     return re.sub(r"\D", "", phone)
 
 
-def fetch_contacts(supabase: Client, settings: Settings) -> list[Contact]:
+def fetch_contacts(settings: Settings) -> list[Contact]:
     columns = f"{settings.name_column},{settings.phone_column}"
-    response = (
-        supabase.table(settings.contacts_table)
-        .select(columns)
-        .limit(settings.send_limit)
-        .execute()
-    )
+    url = f"{settings.supabase_url.rstrip('/')}/rest/v1/{settings.contacts_table}"
+    headers = {
+        "apikey": settings.supabase_key,
+        "Authorization": f"Bearer {settings.supabase_key}",
+    }
+    params = {"select": columns, "limit": settings.send_limit}
+
+    response = requests.get(url, headers=headers, params=params, timeout=30)
+    response.raise_for_status()
 
     contacts: list[Contact] = []
-    for row in response.data or []:
+    for row in response.json():
         name = str(row.get(settings.name_column, "")).strip()
         phone = normalize_phone(str(row.get(settings.phone_column, "")))
 
@@ -113,8 +115,7 @@ def main() -> int:
 
     try:
         settings = load_settings()
-        supabase = create_client(settings.supabase_url, settings.supabase_key)
-        contacts = fetch_contacts(supabase, settings)
+        contacts = fetch_contacts(settings)
 
         if not contacts:
             logging.warning("Nenhum contato válido encontrado no Supabase.")
